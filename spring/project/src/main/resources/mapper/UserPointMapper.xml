@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserPointMapper">
+
+	 <select id="list" resultType="com.example.domain.UserPointVO">
+	 	select * from user_point_table 
+ 	 </select>
+ 	 
+ 	 <select id="read" resultType="com.example.domain.UserPointVO">
+ 	 	select * from user_point_table where user_point_id=#{user_point_id}
+ 	 </select>
+ 	 
+ 	 <insert id="Reginsert">
+ 	 	insert into user_point_table(user_point_id)
+ 	 	values(#{user_id})
+ 	 </insert>
+ 	 
+ 	 <update id="pointUpdate">
+ 	 	update user_point_table set
+ 	 	user_point=user_point+#{getPoint} where user_point_id=#{user_point_id}
+ 	 </update>
+ 	 
+ 	 <update id="gradeUpdate">
+ 	 	update user_point_table set
+ 	    user_grade=#{user_grade} where user_point_id=#{user_point_id}
+ 	 </update>
+ 	 
+ 	 <delete id="delete">
+ 	 delete from user_point_table where user_point_id=#{user_point_id}
+ 	 </delete>
+ 	 <select id="userrank" resultType="int">
+ 	 select rank from (select user_point,user_id,@rank := @rank +1 as rank 
+ 	 from user_grade_char,(select @rank := 0)as r order by user_point desc) as ranking 
+ 	 where user_id=#{user_point_id}
+ 	 </select>
+ 	 <select id="rankList" resultType="hashmap">
+ 	 select * from (select *,@rank := @rank +1 as rank 
+ 	 from user_grade_char,(select @rank := 0)as r order by user_point desc) as ranking;
+ 	 </select>
+ 	 <select id="rankListWeb" resultType="hashmap">
+		select * from (select *,@rank := @rank +1 as rank
+		from user_grade_char,(select @rank := 0)as r order by user_point desc) as ranking 
+		where user_id  or nickName like concat('%',#{search},'%') limit #{start},#{num}
+	</select>
+	 <select id="rankReadWeb" resultType="hashmap">
+		select * from (select *,@rank := @rank +1 as rank
+		from user_grade_char,(select @rank := 0)as r order by user_point desc) as ranking 
+		where user_id =#{user_id};
+	</select>
+	<select id="userTotal" resultType="int">
+	select count(*) from user_point_table
+	</select>
+	 <select id="rankRead" resultType="hashmap">
+     select * from (select *,@rank := @rank +1 as rank 
+     from user_grade_char,(select @rank := 0)as r order by user_point desc) as ranking where user_id = #{user_id}
+     </select>
+</mapper>

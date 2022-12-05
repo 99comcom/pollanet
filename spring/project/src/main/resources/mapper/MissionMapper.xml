@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.MissionMapper">
+	 <select id="list" resultType="com.example.domain.MissionVO">
+	 	select * from mission_table
+		 <if test="m_keyword != null">
+		 where m_title like concat('%',#{m_keyword},'%') or m_content like concat('%',#{m_keyword},'%')
+		 </if>
+		 order by mission_code desc
+		 limit #{m_start}, #{m_number}
+ 	 </select>
+ 	 <select id="categorylist" resultType="com.example.domain.MissionVO">
+	 	select * from mission_table
+		 <if test="m_category != null">
+		 where m_category =#{m_category}
+		 </if>
+		 <if test="m_sort != null">
+		 or m_sort = #{m_sort}
+		 </if>
+		 order by m_result desc
+		 limit #{m_start}, #{m_number}
+ 	 </select>
+ 	 
+ 	 
+ 	 <select id="read" resultType="com.example.domain.MissionVO">
+	 	select * from mission_table where mission_code =#{mission_code}
+ 	 </select>
+ 	<insert id="insert">
+ 			insert into mission_table(m_category,m_image,m_title,m_info,m_content,m_content_image,m_target,m_get_point,m_user_id,m_sort)
+ 			values(#{m_category},#{m_image},#{m_title},#{m_info},#{m_content},#{m_content_image},#{m_target},#{m_get_point},#{m_user_id},#{m_sort})
+ 	</insert>
+ 	
+ 	 <update id="update">
+ 	 	update mission_table 
+ 	 	set
+ 	 		m_start_Date=#{m_start_Date},m_last_Date=#{m_last_Date},
+ 	 		m_category=#{m_category},m_image=#{m_image},m_title=#{m_title},
+ 	 		m_info=#{m_info},m_content=#{m_content},m_content_image=#{m_content_image},
+ 	 		m_target=#{m_target},m_result=#{m_result},m_get_point=#{m_get_point} where mission_code=#{mission_code}
+ 	 </update>
+ 	  	 <update id="resultupdate">
+ 	 	update mission_table 
+ 	 	set
+ 	 		m_result=m_result+1 where mission_code=#{mission_code}
+ 	 </update> 	 
+ 	 <delete id="delete">
+ 	 	delete from mission_table where mission_code=#{mission_code} 
+ 	 </delete>
+ 	 <select id="topdaymission" resultType="map">
+ 	 	select count(*) total, mission_code from user_mission 
+		where Date(um_register_Date) = Date(now()) 
+		and mission_code in (select mission_code from mission_table where m_sort = #{m_sort}) 
+		group by mission_code order by count(*) desc limit 1;
+ 	 </select>
+ 	 <select id="topweekmission" resultType="map">
+ 	 	select count(*),mission_code from user_mission 
+		where date(um_register_Date) between date(now())-6 and date(now()) 
+		and mission_code in (select mission_code from mission_table where m_sort = #{m_sort})  
+		group by mission_code order by count(*) desc limit 1;
+ 	 </select>
+ 	 <select id="bestmission" resultType="com.example.domain.MissionVO">
+ 	 	select * from mission_table order by m_get_point desc limit 1;
+ 	 </select>
+ 	 <select id="clearMision" resultType="int">
+ 	 	select count(*) from user_mission where 
+		date(um_register_Date)=date(now()) 
+		and um_user_id=#{um_user_id} and mission_code = #{mission_code}
+ 	 </select>
+ 	  <select id="clearMisionTotal" resultType="int">
+ 	 	select count(*) from user_mission where 
+		date(um_register_Date)=date(now()) 
+		and um_user_id=#{um_user_id} 
+ 	 </select>
+ 	 <select id="listTotal" resultType="int">
+ 	 	select count(*) cnt from mission_table
+ 	 </select>
+</mapper>

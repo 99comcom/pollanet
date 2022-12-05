@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.GroupMapper">
+	 <select id="list" resultType="com.example.domain.GroupVO">
+	 	select * from group_table
+		 where g_title like concat('%',#{g_keyword},'%')
+		 order by group_code desc
+ 	 </select>
+ 	 <select id="read" resultType="com.example.domain.GroupVO" >
+ 	 	select * from group_table where group_code=#{group_code}
+ 	 </select>
+ 	 <insert id="groupinsert">
+ 	 	insert into group_table (g_user_id,g_register_Date,g_category,g_title,g_content,g_image,g_code)
+ 	 	value (#{g_user_id},now(),#{g_category},#{g_title},#{g_content},#{g_image},#{g_code})
+ 	 </insert>
+ 	 
+ 	 <insert id="groupleaderinsert">
+ 	 	insert into group_table (g_user_id, g_join_Date,g_code,g_user_sort)
+ 	 	value (#{gm_user_id},now(),#{g_code},"1")
+ 	 </insert>
+ 	 
+ 	  	 <insert id="memberinsert">
+ 	 	insert into group_table (g_user_id, g_join_Date)
+ 	 	value (#{gm_user_id},now())
+ 	 </insert>
+ 	 
+ 	 <update id="update">
+ 	 	update group_table set g_title=#{g_title} , g_content=#{g_content},g_image=#{g_image) where group_code=#{group_code}
+
+ 	 </update>
+ 	 <delete id="delete">
+ 	 	delete from group_table where group_code=#{group_code}
+ 	 </delete>
+</mapper>

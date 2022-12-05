@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.MissionUserMapper">
+	 <select id="list" resultType="com.example.domain.MissionUserVO">
+	 	select * from user_mission
+		 <if test="m_keyword != null">
+		 where um_title like concat('%',#{um_keyword},'%') or um_content like concat('%',#{um_keyword},'%')
+		 </if>
+		 order by user_mission_code desc
+		 limit #{um_start}, #{um_number}
+	 	
+ 	 </select>
+ 	 <select id="userMissionList" resultType="com.example.domain.MissionUserVO">
+ 	 	select * from user_mission where um_user_id=#{um_user_id} order by user_mission_code desc limit #{um_start}, #{um_number}
+ 	 </select>
+ 	 <select id="read" resultType="com.example.domain.MissionUserVO">
+	 	select * from user_mission where user_mission_code =#{user_mission_code}
+ 	 </select>
+ 	
+ 	 <insert id="insert">
+ 	 	insert into user_mission 
+ 	 	(mission_code,um_user_id,um_content,um_title,um_image,um_register_Date,um_get_point)
+ 	 	value
+ 	 	(#{mission_code},#{um_user_id},#{um_content},#{um_title},#{um_image},now(),#{um_get_point})
+ 	 </insert>
+ 	 <update id="update">
+ 	 	update user_mission 
+ 	 	set
+ 	 		um_content=#{um_content},um_title=#{um_title},um_image=#{um_image},um_updateDate=now()
+ 	 		 where user_mission_code=#{user_mission_code}
+ 	 	
+ 	 </update>
+ 	 <delete id="delete">
+ 	 	delete from user_mission where user_mission_code=#{user_mission_code} 
+ 	 </delete>
+ 	 
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.BoardHeartMapper">
+	 <select id="list" resultType="com.example.domain.BoardHeartVO">												
+	 	select * from board_heart_table
+ 	 </select>
+ 	 <select id="read" resultType="int">													
+	 	select count(*) from board_heart_table where
+	 	h_user_id=#{h_user_id} and h_board_code=#{h_board_code}
+		
+ 	 </select>
+ 	 <select id="insert" >
+ 	 	insert into board_heart_table(h_user_id,h_board_code,h_sort) values(#{h_user_id},#{h_board_code},1)
+ 	 </select>
+ 	 <select id="delete">
+ 	 	delete from board_heart_table where
+	 	h_user_id=#{h_user_id} and h_board_code=#{h_board_code}
+	 </select>
+ 	
+ 	
+ 	
+</mapper>

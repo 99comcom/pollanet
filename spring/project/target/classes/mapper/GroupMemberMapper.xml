@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.GroupMemberMapper">
+	 <select id="list" resultType="com.example.domain.GroupMemberVO">
+	 SELECT g_member_table.*, user_status.nickName
+		FROM g_member_table 
+	    LEFT OUTER JOIN user_status 
+	    ON g_member_table.gm_user_id = user_status.user_id
+        where nickName like concat('%',g_keyword,'%');
+	 
+ 	 </select>
+ 	 
+ 	 <select id="memberlist" resultType="com.example.domain.GroupMemberVO">
+ 	 	SELECT g_member_table.*, user_status.nickName
+		FROM g_member_table 
+	    LEFT OUTER JOIN user_status 
+	    ON g_member_table.gm_user_id = user_status.user_id
+	    where g_code =#{g_code}
+ 	 </select>
+ 	 
+ 	  <select id="read" resultType="com.example.domain.GroupMemberVO" >
+ 	 	select * from user_group_member where member_code=#{member_code}
+ 	 </select>
+ 	 
+ 	  <select id="membercheck" resultType="com.example.domain.GroupMemberVO" >
+ 	 	select * from g_member_table where g_code=#{g_code} and gm_user_id=#{gm_user_id}
+ 	 </select>
+ 	 
+ 	 
+ 	 <insert id="groupinsert">
+ 	 	insert into g_member_table (gm_user_id, gm_sort, gm_register_Date,g_code)
+ 	 	value (#{gm_user_id}, "1", now(),#{g_code})
+ 	 </insert>
+ 	 <insert id="memberinsert">
+ 	 	insert into g_member_table (gm_user_id,gm_register_Date,g_code)
+ 	 	value (#{gm_user_id},now(),#{g_code})
+ 	 </insert>
+ 	 <delete id="delete">
+ 	 	delete from g_member_table where member_code=#{member_code}
+ 	 </delete>
+ 	 
+ 	 
+ 	 
+</mapper>

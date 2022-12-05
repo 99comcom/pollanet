@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.BoardMapper">
+	 <select id = "boardListheat" resultType="com.example.domain.BoardVO">
+	 select * from user_board_table order by b_heart desc limit 4
+	 </select>
+	 <select id="boardList" resultType="com.example.domain.BoardVO">
+	 	/*전체 게시글 목록*/														
+	 	select * from user_board_table where b_del="0" and b_category=#{b_category} and (b_title or b_user_id or nickName like concat('%',#{search},'%')) order by board_code desc limit #{start}, #{num}
+ 	 </select>
+ 	 <select id="boardListtotal" resultType="int">
+	 	/*전체 게시글 목록수*/														
+	 	select count(*) from user_board_table where b_del="0" and b_category=#{b_category} and (b_title or b_user_id or nickName like concat('%',#{search},'%')) 
+ 	 </select>
+ 	 <select id="boardListand" resultType="com.example.domain.BoardVO">
+	 	/*전체 게시글 목록 안드로이드*/														
+	 	select * from user_board_table where
+		  b_title like concat('%',#{b_title},'%')
+	 	  and b_del="0" order by board_code desc
+ 	 </select>
+ 	 <select id="boardRead" resultType="com.example.domain.BoardVO">
+ 	 	/*특정 게시글 출력*/	
+ 	 	select * from user_board_table where board_code=#{board_code} and b_del="0";
+ 	 </select>
+ 	 <select id="userBoardList" resultType="com.example.domain.BoardVO">
+ 	 	/*특정 유저가 작성한 게시글 목록*/	
+ 	 	select * from user_board_table where b_user_id=#{b_user_id} and b_del="0" order by board_code desc limit #{start}, #{num};
+ 	 </select>
+ 	 <insert id="boardInsert">
+ 	 	/*게시글 작성- 수정 필요*/
+ 	 	insert into board_table(b_user_id,b_title,b_content,b_image,b_category) values(#{b_user_id},#{b_title},#{b_content},#{b_image},#{b_category});
+ 	 </insert>
+ 	 <update id="boardUpdate">
+ 	 	/*게시글 수정- 수정 필요*/
+ 	 	update board_table set b_title=#{b_title}, b_content=#{b_content}, b_category=#{b_category} , b_update_Date=now() b_image=#{b_image} where board_code=#{board_code}
+ 	 </update>
+ 	 <update id="boardDelete">
+ 	 	/*게시글 삭제*/
+ 	 	update board_table set b_del=#{b_del}  where board_code=#{board_code}
+ 	 </update>
+ 	 <update id="boardDeleteadmin">
+ 	 	/*게시글 삭제*/
+ 	 	update board_table set b_del=#{b_del},b_report_content=#{b_report_content} where board_code=#{board_code}
+ 	 </update>
+ 	 <update id="boardReport">
+ 	 	/*게시글 신고*/
+ 	 	update board_table set b_report=b_report+1 where board_code=#{board_code}
+ 	 </update>
+ 	 <update id="boardRecommend">
+ 	 	/*게시글 추천*/
+ 	 	update board_table set b_recommend=b_recommend+1 where board_code=#{board_code}
+ 	 </update>
+ 	 <select id="boardReportList" resultType="com.example.domain.BoardVO">
+ 	 	/*삭제 되지 않은 신고 게시글 리스트*/
+ 	 	select * from board_table where b_report>0 and b_del="0" order by b_report desc limit #{start}, #{num};
+ 	 </select>
+ 	 <select id="boardDelList" resultType="com.example.domain.BoardVO">
+ 	 	/*신고 게시글 리스트*/
+ 	 	select * from board_table where b_del="1" order by board_code desc limit #{start}, #{num};
+ 	 </select>
+ 	 <select id="boardNoticeList" resultType="com.example.domain.BoardVO">
+ 	 	/*신고 게시글 리스트*/
+ 	 	select * from board_table where b_del="0" and b_category=4 order by board_code desc limit #{start}, #{num};
+ 	 </select>
+ 	 <update id="boardCommentCnt">
+ 	 	/*댓글 수 증가*/
+ 	 	update board_table set b_comment_count=b_comment_count+1 where board_code=#{board_code}
+ 	 </update>
+ 	 <update id="heart">
+ 	 	/*게시글 좋아요 +*/
+ 	 	update board_table set b_heart=b_heart+1 where board_code=#{board_code}
+ 	 </update>
+ 	 <update id="heartCancel">
+ 	 	/*게시글 좋아요 -*/
+ 	 	update board_table set b_heart=b_heart-1 where board_code=#{board_code}
+ 	 </update>
+ 	 <select id="reportboardList" resultType="com.example.domain.BoardVO">
+	 	/*신고 게시글 목록*/														
+	 	select * from board_table where b_report>0  order by board_code desc limit #{start}, #{num}
+ 	 </select>
+		<select id="reportboardListtotal" resultType="int">
+	 	/*신고 게시글 목록수*/														
+	 	select count(*) from board_table where b_report>0  
+	 	</select>
+</mapper>

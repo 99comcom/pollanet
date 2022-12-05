@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CommentMapper">
+	 <select id="commentList" resultType="com.example.domain.CommentVO">
+	 	/*전체 댓글 리스트*/
+	 	select * from user_comment_table order by comment_code desc limit #{start}, #{num};
+ 	 </select>
+ 	 <select id="boardCommentList" resultType="com.example.domain.CommentVO">
+	 	/*특정 게시글의 댓글 리스트*/
+	 	select * from user_comment_table where board_Code=#{board_Code} order by comment_code asc;
+ 	 </select>
+ 	 <select id="userCommentList" resultType="com.example.domain.CommentVO">
+ 	 	/*특정 유저가 작성한 댓글 리스트*/
+ 	 	select * from user_comment_table where c_user_id=#{c_user_id} order by comment_code desc limit #{start}, #{num};
+ 	 </select>
+ 	 <insert id="commentInsert">
+ 	 	/*댓글 입력*/
+ 	 	insert into comment_table(c_user_id,c_comment,board_Code) values(#{c_user_id},#{c_comment},#{board_Code});
+ 	 </insert>
+ 	 <update id="commentUpdate">
+ 	 	/*댓글 내용 수정 (댓글 내용 수정 및 수정 날짜 입력)*/
+ 	 	update comment_table set c_comment=#{c_comment}, c_update_Date=now() where comment_code=#{comment_code};
+ 	 </update>
+ 	 <update id="commentDelete">
+ 	 	/*댓글 삭제*/
+ 	 	update comment_table set c_del=1, c_update_Date=now(),c_comment="삭제된 댓글입니다" where comment_code=#{comment_code};
+ 	 </update>
+ 	 <update id="commentReport">
+ 	 	/*댓글 신고*/
+ 	 	update comment_table set c_report=c_report+1 where comment_code=#{comment_code};
+ 	 </update>
+ 	 <update id="commentRecommend">
+ 	 	/*댓글 추천*/
+ 	 	update comment_table set c_recommend=c_recommend+1 where comment_code=#{comment_code};
+ 	 </update>
+ 	 <select id="totalComment" resultType="int">
+ 	 /*게시글 댓글수*/
+ 	 select count(*) cnt from comment_table where board_Code = #{board_Code}
+ 	 </select>
+ 	  <select id="atotalComment" resultType="int">
+ 	 /*게시글 댓글수*/
+ 	 select count(*) cnt from comment_table 
+ 	 </select>
+ 	  
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserMapper">
+	<select id="userStatusList" resultType="com.example.domain.UserStatusVO">
+		select * from user_status
+		where admin_Code='0';
+	</select>
+	<select id="userStatusListWeb" resultType="com.example.domain.UserStatusVO">
+		select * from user_status 
+		where admin_Code='0' and (user_id like concat('%',#{search},'%') or nickName like concat('%',#{search},'%'))
+		order by user_id asc limit
+		#{start},#{num};
+	</select>
+	<select id="userBlackListWeb" resultType="com.example.domain.UserStatusVO">
+		select * from user_status 
+		where user_black='1' and (user_id like concat('%',#{search},'%') or nickName like concat('%',#{search},'%'))
+		order by user_id asc limit #{start},#{num};
+	</select>
+	<select id="userLogin" resultType="com.example.domain.UserInfoVO">
+		select * from user_info where
+		id = #{user_Id};
+	</select>
+	<insert id="userIdRegister">
+		insert into user_info(id,password)
+		values(#{id},#{password})
+	</insert>
+	<insert id="userRegister">
+		insert into
+		user_status(user_id,name,nickName,email,tel)
+		values(#{user_id},#{name},#{nickName},#{email},#{tel})
+	</insert>
+	<select id="userRead" resultType="com.example.domain.UserStatusVO">
+		select * from user_status where
+		user_id = #{user_id}
+	</select>
+	<select id="duplicationId" resultType="int">
+		select count(*) from
+		user_status where user_id = #{str}
+	</select>
+	<select id="duplicationnickname" resultType="int">
+		select count(*) from
+		user_status where nickName = #{str}
+	</select>
+	<select id="searchId" resultType="String">
+		select user_id from user_status
+		where name = #{name} and tel = #{tel}
+	</select>
+	<update id="passwordupdate">
+		update user_info set password = #{password} where
+		id=#{id}
+	</update>
+	<update id="userupdate">
+		update user_status set
+		name=#{name},tel=#{tel},email=#{email},nickName=#{nickName} where
+		user_id = #{user_id}
+	</update>
+	<update id="userdelupdate">
+		update user_status set user_del = #{user_del},
+		name=#{name}, nickName=#{nickName} where user_id = #{user_id}
+	</update>
+	<update id="userDelWeb">
+		update user_status set user_del = '1' where user_id = #{user_id}
+	</update>
+	<update id="userBlackWeb">
+		update user_status set user_black = '1' where user_id = #{user_id}
+	</update>
+	<select id="daytopuser" resultType="map">
+		select sum(get_point)
+		sum_point,user_point_id from user_point_get_table
+		where
+		date(get_point_Date) = date(now())
+		group by user_point_id order by
+		sum_point desc limit 1
+	</select>
+	<select id="weektopuser" resultType="map">
+		select sum(get_point)
+		sum_point,user_point_id
+		from user_point_get_table where
+		date(get_point_Date)
+		between date(now())-6 and date(now())
+		group by
+		user_point_id order by sum_point desc limit 1
+	</select>
+	<select id="userTotal" resultType="int">
+		select count(*) from
+		user_status where admin_Code='0' and (user_id like concat('%',#{search},'%') or nickName like concat('%',#{search},'%'))
+		order by user_id asc
+	</select>
+	<select id="blackUserTotal" resultType="int">
+		select count(*) from
+		user_status where user_black=1 and (user_id like concat('%',#{search},'%') or nickName like concat('%',#{search},'%'))
+		order by user_id asc
+	</select>
+	<update id="usercharsort">
+		update user_status set character_sort = #{character_sort} where user_id = #{user_id}
+	</update>
+</mapper>

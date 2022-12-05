@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.GroupUserPointMapper">
+	  <select id="list" resultType="com.example.domain.GroupUserPointVO">
+	 	select * from group_user_point_table
+ 	 </select>
+ 	 <select id="read" resultType="com.example.domain.GroupUserPointVO">
+ 	 	select * from group_user_point_table 
+ 	 	where group_point_code=#{group_point_code} and group_user_point_id=#{group_user_point_id}
+ 	 </select>
+ 	 <insert id="insert">
+ 	 	insert into group_user_point_table(group_user_point,group_point_code,group_user_point_id)
+ 	 	value(0,#{group_point_code},#{group_user_point_id})
+ 	 </insert>
+ 	 <update id="update">
+ 	 	update group_user_point_table set group_user_point = (group_user_point + #{group_user_point}) 
+ 	 	where group_point_code=#{group_point_code} and group_user_point_id=#{group_user_point_id}
+ 	 </update>
+ 	 <delete id="delete">
+ 	 	delete from group_user_point_table 
+ 	 	where group_point_code=#{group_point_code} and group_user_point_id=#{group_user_point_id}
+ 	 </delete>
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserReportMapper">
+	 <select id="reportList" resultType="com.example.domain.UserReportVO">
+	 	select * form report_table
+ 	 </select>
+ 	 <insert id="boardreportInser">
+ 	 	insert into user_report_table(reporter_id,report_board_code,report_code) 
+ 	 	values(#{reporter_id},#{report_board_code},#{report_code})
+ 	 </insert>
+ 	  <insert id="commentreportInser">
+ 	 	insert into user_report_table(reporter_id,report_comment_code,report_code) 
+ 	 	values(#{reporter_id},#{report_comment_code},#{report_code})
+ 	 </insert>
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.GroupPointGetMapper">
+	 <select id="list" resultType="com.example.domain.GroupPointGetVO">
+        	 	SELECT group_point_get_table.*,group_table.g_title,user_status.nickName
+		FROM group_point_get_table 
+	    LEFT JOIN group_table
+	    ON group_table.g_code = group_point_get_table.group_point_code
+		LEFT JOIN user_status
+	    ON group_point_get_table.group_user_point_id = user_status.user_id
+	    where group_point_code =#{group_point_code}
+	    order by get_point_Date desc;
+ 	 </select>
+ 	 <insert id="insert">
+ 	 	insert into group_point_get_table(group_point_code,get_point,get_point_Date,get_sort,group_user_point_id)
+ 	 	value (#{group_point_code},#{get_point},now(),"+",#{group_user_point_id})
+ 	 </insert>
+</mapper>

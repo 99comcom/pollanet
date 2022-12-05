@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.GroupPointMapper">
+	 <select id="list" resultType="com.example.domain.GroupPointVO">
+	 	SELECT group_point_table.*,group_table.g_title
+		FROM group_point_table 
+	    LEFT OUTER JOIN group_table
+	    ON group_table.g_code = group_point_table.group_point_code
+	    where group_point_code =#{group_point_code}
+ 	 </select>
+ 	 <select id="read" resultType="com.example.domain.GroupPointVO">
+ 	 	select * from group_point_table where group_point_code=#{group_point_code}
+ 	 </select>
+ 	 <insert id="insert">
+ 	 	insert into group_point_table (group_point_code,group_point_Date) value (#{group_point_code},now())
+ 	 </insert>
+ 	 <update id="update">
+ 	 	update group_point_table set group_point=group_point+#{group_point} where group_point_code=#{group_point_code}
+ 	 </update>
+ 	 <delete id="delete">
+ 	 		delete from group_point_table where group_point_code=#{group_point_code} 
+ 	 </delete>
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserPointGetMapper">
+	 <select id="list" resultType="com.example.domain.UserPointGetVO">
+	 	select * from user_point_get_table 
+	 	order by get_point_Date desc limit #{start},#{number}
+ 	 </select>
+ 	 
+ 	  <select id="read" resultType="com.example.domain.UserPointGetVO">
+ 	 	select * from user_point_get_table where user_point_id=#{user_point_id}
+ 	 </select>
+ 	 
+ 	 <insert id="pointInsert">
+ 	 	insert into user_point_get_table(user_point_id,get_point,get_point_Date,get_sort)
+ 	 	value(#{user_point_id},#{getPoint},now(),"1")
+ 	 </insert>
+ 	 <insert id="gradeInsert">
+ 	 	insert into user_point_get_table(user_point_id,get_grade,get_grade_Date,get_sort)
+ 	 	value(#{user_point_id},#{get_grade},now(),#{upg_sort})
+ 	 </insert>
+ 	 <delete id="delete">
+ 	 	delete from user_point_get_table 
+ 	 	where user_point_id=#{user_point_id}
+ 	 </delete>
+ 	 
+ 	 
+</mapper>
